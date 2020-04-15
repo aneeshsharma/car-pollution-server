@@ -4,7 +4,7 @@
   "description": "The backend for Car Pollution Tracker, to monitor data and serve it to the mobile app",
   "main": "index.js",
   "scripts": {
-    "test": "node index.js"
+    "start": "node index.js"
   },
   "repository": {
     "type": "git",
