@@ -1,0 +1,25 @@
+{
+  "name": "car-pollution-server",
+  "version": "0.1.0",
+  "description": "The backend for Car Pollution Tracker, to monitor data and serve it to the mobile app",
+  "main": "index.js",
+  "scripts": {
+    "test": "node index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/aneeshsharma/car-pollution-server.git"
+  },
+  "keywords": [
+    "Pollution"
+  ],
+  "author": "Anish Sharma",
+  "license": "GPL-3.0-or-later",
+  "bugs": {
+    "url": "https://github.com/aneeshsharma/car-pollution-server/issues"
+  },
+  "homepage": "https://github.com/aneeshsharma/car-pollution-server#readme",
+  "dependencies": {
+    "express": "^4.17.1"
+  }
+}
