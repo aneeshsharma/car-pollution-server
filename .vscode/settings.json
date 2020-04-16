@@ -1,0 +1,8 @@
+{
+    "appService.zipIgnorePattern": [
+        "node_modules{,/**}",
+        ".vscode{,/**}"
+    ],
+    "appService.defaultWebAppToDeploy": "/subscriptions/fef6eef2-3cf3-4976-af50-8b1dda99b711/resourceGroups/appsvc_linux_centralus/providers/Microsoft.Web/sites/carspoll",
+    "appService.deploySubpath": ""
+}
