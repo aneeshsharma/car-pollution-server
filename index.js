@@ -5,6 +5,8 @@ const cors = require("cors");
 var MongoClient = require("mongodb");
 const conn = require("./config/deployement-config").conn;
 
+const self_uri = process.env.SELF_URI || "http://localhost:5000/";
+
 let db, dbo;
 
 console.log("Env URI: " + process.env.MONGO_URI);
