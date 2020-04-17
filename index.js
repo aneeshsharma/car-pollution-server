@@ -21,7 +21,13 @@ MongoClient.connect(conn.uri, (err, db_) => {
     });
 });
 
-app.use(cors());
+app.use(
+    cors({
+        origin: "*",
+        allowedHeaders: ["Content-Type", "Authorization"],
+        methods: ["GET"],
+    })
+);
 
 function getCollection(deviceID) {
     "pollution_data_" + deviceID;
@@ -33,15 +39,12 @@ app.get("/", (req, res) => {
 });
 
 app.get("/getdata", (req, res) => {
-    res.header(
-        "Access-Control-Allow-Headers",
-        "Origin, X-Requested-With, Content-Type, Accept"
-    );
     res.setHeader("Content-Type", "application/json");
     if (!req.deviceID) {
         res.send({
             status: "INVALID",
         });
+        return;
     }
     const deviceID = req.deviceID;
     const startDate = new Date(req.start).toISOString;
