@@ -1,8 +1,0 @@
-GET https://carspoll.azurewebsites.net/getdata
-Content-Type: application/json; charset=utf-8
-
-{
-    "deviceId": "testid",
-    "startTime": "2019-01-01",
-    "endTime": "2021-01-01"
-}
