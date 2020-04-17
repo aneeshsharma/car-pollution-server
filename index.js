@@ -2,7 +2,7 @@ const express = require("express");
 const app = express();
 const port = process.env.PORT || 5000;
 const cors = require("cors");
-var MongoClient = require("mongodb").MongoClient;
+var MongoClient = require("mongodb");
 const conn = require("./config/deployement-config").conn;
 
 let db, dbo;
@@ -21,15 +21,11 @@ MongoClient.connect(conn.uri, (err, db_) => {
     });
 });
 
+app.use(cors());
+
 function getCollection(deviceID) {
     "pollution_data_" + deviceID;
 }
-
-app.use(
-    cors({
-        origin: "http://localhost:5000/",
-    })
-);
 
 app.get("/", (req, res) => {
     res.setHeader("Content-Type", "application/json");
@@ -37,7 +33,16 @@ app.get("/", (req, res) => {
 });
 
 app.get("/getdata", (req, res) => {
+    res.header(
+        "Access-Control-Allow-Headers",
+        "Origin, X-Requested-With, Content-Type, Accept"
+    );
     res.setHeader("Content-Type", "application/json");
+    if (!req.deviceID) {
+        res.send({
+            status: "INVALID",
+        });
+    }
     const deviceID = req.deviceID;
     const startDate = new Date(req.start).toISOString;
     const endDate = new Date(req.endDate).toISOString;
