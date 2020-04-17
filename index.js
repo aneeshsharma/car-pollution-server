@@ -25,7 +25,7 @@ MongoClient.connect(conn.uri, (err, db_) => {
 
 app.use(
     cors({
-        origin: "*",
+        origin: self_uri,
         allowedHeaders: ["Content-Type", "Authorization"],
         methods: ["GET"],
     })
