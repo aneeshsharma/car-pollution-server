@@ -27,7 +27,7 @@ function getCollection(deviceID) {
 
 app.use(
     cors({
-        origin: "http://localhost",
+        origin: "http://localhost:5000/",
     })
 );
 
@@ -50,23 +50,6 @@ app.get("/getdata", (req, res) => {
     const collectionName = getCollection(deviceID);
 
     let journeyData;
-
-    db.collectionName(collectionName, (err, names) => {
-        if (err) {
-            res.send({
-                status: "FAILED",
-                err: "UNEXPECTED",
-            });
-        }
-        if (names.length <= 0) {
-            console.log(collectionName + " doesn't exist!");
-            res.send({
-                status: "FAILED",
-                err: "NO COLLECTION",
-            });
-            return;
-        }
-    });
 
     dbo.collection(collectionName)
         .find(query)
