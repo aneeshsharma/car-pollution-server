@@ -1,0 +1,8 @@
+@url = https://carspoll.azurewebsites.net/
+
+GET {{url}}/getdata HTTP/1.1
+Content-Type: application/json
+//This empty line is important
+{
+    "deviceID": "test"
+}
