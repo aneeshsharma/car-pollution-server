@@ -1,9 +1,12 @@
 const express = require("express");
 const app = express();
-const port = process.env.PORT || 5000;
 const cors = require("cors");
 var MongoClient = require("mongodb");
+const bodyParser = require("body-parser");
+
 const conn = require("./config/deployement-config").conn;
+
+const port = process.env.PORT || 5000;
 
 const self_uri = process.env.SELF_URI || "http://localhost:5000/";
 
@@ -31,8 +34,11 @@ app.use(
     })
 );
 
-function getCollection(deviceID) {
-    "pollution_data_" + deviceID;
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded());
+
+function getCollection(deviceId) {
+    return "pollution_data_" + deviceId;
 }
 
 app.get("/", (req, res) => {
@@ -41,62 +47,76 @@ app.get("/", (req, res) => {
 });
 
 app.get("/getdata", (req, res) => {
+    var status = "FAILED";
     res.setHeader("Content-Type", "application/json");
-    if (!req.deviceID) {
+    if (!req.body.deviceId) {
         res.send({
             status: "INVALID",
         });
         return;
     }
-    const deviceID = req.deviceID;
-    const startDate = new Date(req.start).toISOString;
-    const endDate = new Date(req.endDate).toISOString;
+    const deviceId = req.body.deviceId;
+    const startTime = new Date(req.body.startTime).toISOString;
+    const endTime = new Date(req.body.endTime).toISOString;
+
+    console.log("Recieved: " + req.body);
 
     const query = {
-        startTime: { $lte: endDate },
-        endTime: { $gte: startDate },
+        startTime: { $lte: endTime },
+        endTime: { $gte: startTime },
     };
 
-    const collectionName = getCollection(deviceID);
+    const collectionName = getCollection(deviceId);
+
+    console.log("Querying collection " + collectionName);
 
     let journeyData;
 
     dbo.collection(collectionName)
-        .find(query)
-        .toArray((err, res) => {
+        .find()
+        .toArray((err, dbRes) => {
             if (err) {
                 res.send({
                     status: "FAILED",
                     err: "UNEXPECTED",
                 });
             }
-            console.log("Got result " + res);
-            journeyData = res;
+            console.log(dbRes);
+            journeyData = dbRes;
+
+            if (journeyData) status = "SUCCESS";
+            const result = {
+                status: status,
+                journeyData: journeyData,
+            };
+
+            console.log(result);
+
+            res.setHeader("Content-Type", "application/json");
+            res.send(result);
         });
-
-    const result = {
-        status: "SUCCESS",
-        journeyData: journeyData,
-    };
-
-    res.setHeader("Content-Type", "application/json");
-    res.send(JSON.stringify(result));
 });
 
 app.get("/recorddata", (req, res) => {
-    const deviceID = req.deviceID;
-    const journeyData = req.journeyData;
-    const collectionName = getCollection(deviceID);
+    res.setHeader("Content-Type", "application/json");
+    const deviceId = req.body.deviceId;
+    const journeyData = req.body.journeyData;
+    const collectionName = getCollection(deviceId);
+
+    console.log("Device: " + deviceId + " | Data : " + journeyData);
 
     dbo.createCollection(collectionName);
-    dbo.collection(collectionName).insertOne(journeyData, (err, res) => {
-        if (err) throw err;
+    dbo.collection(collectionName).insertOne(journeyData, (err, dbRes) => {
+        if (err) {
+            res.send({
+                status: "FAILED",
+            });
+            return;
+        }
         console.log("Joruney Data inserted");
-    });
-
-    res.setHeader("Content-Type", "application/json");
-    res.send({
-        status: "SUCCESS",
+        res.send({
+            status: "SUCCESS",
+        });
     });
 });
 
