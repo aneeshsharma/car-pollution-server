@@ -105,7 +105,9 @@ app.get("/recorddata", (req, res) => {
 
     console.log("Device: " + deviceId + " | Data : " + journeyData);
 
-    dbo.createCollection(collectionName);
+    if(!collectionName){
+        dbo.createCollection(collectionName);
+    }
     dbo.collection(collectionName).insertOne(journeyData, (err, dbRes) => {
         if (err) {
             res.send({
