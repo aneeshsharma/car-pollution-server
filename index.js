@@ -97,7 +97,7 @@ app.get("/getdata", (req, res) => {
         });
 });
 
-app.get("/recorddata", (req, res) => {
+app.post("/recorddata", (req, res) => {
     res.setHeader("Content-Type", "application/json");
     const deviceId = req.body.deviceId;
     const journeyData = req.body.journeyData;
