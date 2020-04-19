@@ -97,7 +97,7 @@ app.get("/getdata", (req, res) => {
         });
 });
 
-app.get("/recorddata", (req, res) => {
+app.post("/recorddata", (req, res) => {
     res.setHeader("Content-Type", "application/json");
     const deviceId = req.body.deviceId;
     const journeyData = req.body.journeyData;
@@ -105,7 +105,9 @@ app.get("/recorddata", (req, res) => {
 
     console.log("Device: " + deviceId + " | Data : " + journeyData);
 
-    dbo.createCollection(collectionName);
+    if(!collectionName){
+        dbo.createCollection(collectionName);
+    }
     dbo.collection(collectionName).insertOne(journeyData, (err, dbRes) => {
         if (err) {
             res.send({

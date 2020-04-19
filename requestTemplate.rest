@@ -9,7 +9,7 @@ Content-Type: application/json; charset=utf-8
 
 ###
 
-GET https://carspoll.azurewebsites.net/recorddata
+POST https://carspoll.azurewebsites.net/recorddata
 Content-Type: application/json; charset=utf-8
 
 {
@@ -17,11 +17,21 @@ Content-Type: application/json; charset=utf-8
     "journeyData": {
         "startTime": "2019-03-22T02:00:00.000Z",
         "endTime": "2019-03-22T04:00:00.000Z",
-        "data": {
-            "emission": 400,
-            "speed": 30,
-            "engineTemp": 120,
-            "ambientTemp": 30
-        }
+        "startLocationLat": 12.014644,
+        "startLocationLon": 75.275616,
+        "endLocationLat": 11.982435,
+        "endLocationLon": 75.313480, 
+        "emissionAvg": 400,
+        "emissionTotal": 10,
+        "maxSpeed": 60,
+        "speed": 30,
+        "engineTempMax":200,
+        "engineTempMin":35,
+        "engineTemp": 120,
+        "exhaustTemp": 100,
+        "ambientTemp": 30
     }
 }
+
+//emissionAvg will be in ppm
+//emissionTotal will be in kg of CO2
