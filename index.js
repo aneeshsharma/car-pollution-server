@@ -84,8 +84,7 @@ app.get("/getdata", (req, res) => {
     let journeyData;
 
     dbo.collection(collectionName)
-        .find(query)
-        .sort({ startTime: 1 })
+        .find(query, { sort: { startTime: 1 } })
         .toArray((err, dbRes) => {
             if (err) {
                 res.send({
