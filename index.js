@@ -84,7 +84,7 @@ app.get("/getdata", (req, res) => {
     let journeyData;
 
     dbo.collection(collectionName)
-        .find(query, { sort: { startTime: 1 } })
+        .find(query)
         .toArray((err, dbRes) => {
             if (err) {
                 res.send({
@@ -93,6 +93,12 @@ app.get("/getdata", (req, res) => {
                 });
             }
             journeyData = dbRes;
+
+            journeyData.sort((a, b) => {
+                a = new Date(a.startTime);
+                b = new Date(b.startTime);
+                return a > b ? 1 : a < b ? -1 : 0;
+            });
 
             if (journeyData) status = "SUCCESS";
             const result = {
