@@ -65,8 +65,10 @@ app.get("/getdata", (req, res) => {
         return;
     }
     const deviceId = request.deviceId;
-    const startTime = new Date(request.startTime).toISOString;
-    const endTime = new Date(request.endTime).toISOString;
+    const startTime = new Date(request.startTime).toISOString();
+    const endTime = new Date(request.endTime).toISOString();
+
+    console.log(`${startTime} - ${endTime}`);
 
     const query = {
         startTime: { $lte: endTime },
@@ -80,7 +82,7 @@ app.get("/getdata", (req, res) => {
     let journeyData;
 
     dbo.collection(collectionName)
-        .find()
+        .find(query)
         .toArray((err, dbRes) => {
             if (err) {
                 res.send({
@@ -88,7 +90,6 @@ app.get("/getdata", (req, res) => {
                     err: "UNEXPECTED",
                 });
             }
-            console.log(dbRes);
             journeyData = dbRes;
 
             if (journeyData) status = "SUCCESS";
@@ -96,8 +97,6 @@ app.get("/getdata", (req, res) => {
                 status: status,
                 journeyData: journeyData,
             };
-
-            console.log(result);
 
             res.setHeader("Content-Type", "application/json");
             res.send(result);
