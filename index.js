@@ -51,7 +51,6 @@ app.get("/getdata", (req, res) => {
     res.setHeader("Content-Type", "application/json");
 
     let request;
-    console.log(req.body);
     if (req.query.deviceId) {
         request = req.query;
     } else if (req.params.deviceId) {
@@ -64,6 +63,9 @@ app.get("/getdata", (req, res) => {
         });
         return;
     }
+
+    console.log(request);
+
     const deviceId = request.deviceId;
     const startTime = new Date(request.startTime).toISOString();
     const endTime = new Date(request.endTime).toISOString();
