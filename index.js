@@ -28,7 +28,7 @@ MongoClient.connect(conn.uri, (err, db_) => {
 
 app.use(
     cors({
-        origin: self_uri,
+        origin: "*",
         allowedHeaders: ["Content-Type", "Authorization"],
         methods: ["GET"],
     })
@@ -49,17 +49,24 @@ app.get("/", (req, res) => {
 app.get("/getdata", (req, res) => {
     var status = "FAILED";
     res.setHeader("Content-Type", "application/json");
-    if (!req.body.deviceId) {
+
+    let request;
+    console.log(req.body);
+    if (req.query.deviceId) {
+        request = req.query;
+    } else if (req.params.deviceId) {
+        request = req.params;
+    } else if (req.body.deviceId) {
+        request = req.body;
+    } else {
         res.send({
             status: "INVALID",
         });
         return;
     }
-    const deviceId = req.body.deviceId;
-    const startTime = new Date(req.body.startTime).toISOString;
-    const endTime = new Date(req.body.endTime).toISOString;
-
-    console.log("Recieved: " + req.body);
+    const deviceId = request.deviceId;
+    const startTime = new Date(request.startTime).toISOString;
+    const endTime = new Date(request.endTime).toISOString;
 
     const query = {
         startTime: { $lte: endTime },
@@ -105,7 +112,7 @@ app.post("/recorddata", (req, res) => {
 
     console.log("Device: " + deviceId + " | Data : " + journeyData);
 
-    if(!collectionName){
+    if (!collectionName) {
         dbo.createCollection(collectionName);
     }
     dbo.collection(collectionName).insertOne(journeyData, (err, dbRes) => {
