@@ -85,6 +85,7 @@ app.get("/getdata", (req, res) => {
 
     dbo.collection(collectionName)
         .find(query)
+        .sort({ startTime: 1 })
         .toArray((err, dbRes) => {
             if (err) {
                 res.send({
