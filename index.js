@@ -46,7 +46,7 @@ app.get("/", (req, res) => {
     res.send(JSON.stringify({ status: "INVALID" }));
 });
 
-app.get("/getdata", (req, res) => {
+app.get("/data", (req, res) => {
     var status = "FAILED";
     res.setHeader("Content-Type", "application/json");
 
@@ -111,7 +111,7 @@ app.get("/getdata", (req, res) => {
         });
 });
 
-app.post("/recorddata", (req, res) => {
+app.post("/data", (req, res) => {
     res.setHeader("Content-Type", "application/json");
     const deviceId = req.body.deviceId;
     const journeyData = req.body.journeyData;
